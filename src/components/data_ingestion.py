@@ -1,13 +1,16 @@
 import os
 import sys
-from src.exception import CustomException
-from src.logger import logging
 import pandas as pd
 
 from sklearn.model_selection import train_test_split
+
 from dataclasses import dataclass
 
-from src.components.data_transformation import data_transformation
+from src.exception import CustomException
+from src.logger import logging
+from src.components.data_transformation import DataTransformation
+from src.components.model_trainer import ModelTrainerConfig
+from src.components.model_trainer import ModelTrainer
 
 @dataclass          #directly define class variable without using init
 class data_ingestion_config():
@@ -49,5 +52,8 @@ if __name__ == '__main__':
     obj=data_ingestion()
     train_data,test_data=obj.initiate_data_ingestion()
 
-    data_transformation=data_transformation()
-    data_transformation.initiate_data_transormation(train_data,test_data)
+    data_transformation=DataTransformation()
+    train_arr,test_arr,_=data_transformation.initiate_data_transformation(train_data,test_data)
+    
+    model_trainer = ModelTrainer()
+    print(model_trainer.initiate_model_trainer(train_arr,test_arr))
